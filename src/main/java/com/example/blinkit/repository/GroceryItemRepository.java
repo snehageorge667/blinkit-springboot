@@ -2,14 +2,21 @@ package com.example.blinkit.repository;
 
 import com.example.blinkit.entity.GroceryItem;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public interface GroceryItemRepository extends JpaRepository<GroceryItem, Long> {
 
-    List<GroceryItem> findByItemType(String itemType);
+    // Search by name ignoring case
+    List<GroceryItem> findByNameContainingIgnoreCase(String name);
 
-    List<GroceryItem> findByOutletIdentifier(String outletIdentifier);
+    // Search by category ignoring case
+    List<GroceryItem> findByCategoryIgnoreCase(String category);
 
-    List<GroceryItem> findByItemFatContent(String itemFatContent);
+    // Optional: search across name, description, and category
+    List<GroceryItem> findByNameContainingIgnoreCaseOrDescriptionContainingIgnoreCaseOrCategoryContainingIgnoreCase(
+        String name, String description, String category
+    );
 }

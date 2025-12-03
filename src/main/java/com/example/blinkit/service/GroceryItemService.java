@@ -2,8 +2,6 @@ package com.example.blinkit.service;
 
 import com.example.blinkit.entity.GroceryItem;
 import com.example.blinkit.repository.GroceryItemRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,37 +9,34 @@ import java.util.List;
 @Service
 public class GroceryItemService {
 
-    private final GroceryItemRepository repo;
-    private static final Logger log = LoggerFactory.getLogger(GroceryItemService.class);
+    private final GroceryItemRepository repository;
 
-    public GroceryItemService(GroceryItemRepository repo) {
-        this.repo = repo;
+    public GroceryItemService(GroceryItemRepository repository) {
+        this.repository = repository;
     }
 
-    public List<GroceryItem> getAll() {
-        log.info("Fetching all grocery items");
-        return repo.findAll();
+    public List<GroceryItem> searchItems(String keyword) {
+        if (keyword == null || keyword.isEmpty()) {
+            return repository.findAll();
+        }
+        return repository.findByNameContainingIgnoreCaseOrDescriptionContainingIgnoreCaseOrCategoryContainingIgnoreCase(
+                keyword, keyword, keyword
+        );
     }
 
-    public GroceryItem save(GroceryItem item) {
-        log.info("Saving item: {}", item.getItemIdentifier());
-        return repo.save(item);
+    public List<GroceryItem> getAllItems() {
+        return repository.findAll();
     }
 
-    public void delete(Long id) {
-        log.warn("Deleting item with ID: {}", id);
-        repo.deleteById(id);
+    public GroceryItem saveItem(GroceryItem item) {
+        return repository.save(item);
     }
 
-    public List<GroceryItem> getByType(String type) {
-        return repo.findByItemType(type);
+    public GroceryItem getItemById(Long id) {
+        return repository.findById(id).orElse(null);
     }
 
-    public List<GroceryItem> getByFatContent(String fat) {
-        return repo.findByItemFatContent(fat);
-    }
-
-    public List<GroceryItem> getByOutlet(String outletId) {
-        return repo.findByOutletIdentifier(outletId);
+    public void deleteItem(Long id) {
+        repository.deleteById(id);
     }
 }

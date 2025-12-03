@@ -1,54 +1,39 @@
 package com.example.blinkit.controller;
 
 import com.example.blinkit.entity.GroceryItem;
-import com.example.blinkit.service.CSVService;
-import com.example.blinkit.service.GroceryItemService;
+import com.example.blinkit.repository.GroceryItemRepository;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/grocery")
+@RequestMapping("/groceries")
 public class GroceryController {
 
-    private final GroceryItemService service;
-    private final CSVService csvService;
+    private final GroceryItemRepository repository;
 
-    public GroceryController(GroceryItemService service, CSVService csvService) {
-        this.service = service;
-        this.csvService = csvService;
+    public GroceryController(GroceryItemRepository repository) {
+        this.repository = repository;
     }
 
+    // Get all items
     @GetMapping
     public List<GroceryItem> getAll() {
-        return service.getAll();
+        return repository.findAll();
     }
 
-    @GetMapping("/type/{type}")
-    public List<GroceryItem> getByType(@PathVariable String type) {
-        return service.getByType(type);
-    }
+    // Search by name or category
+    @GetMapping("/search")
+    public List<GroceryItem> search(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String category) {
 
-    @GetMapping("/fat/{fat}")
-    public List<GroceryItem> getByFatContent(@PathVariable String fat) {
-        return service.getByFatContent(fat);
-    }
-
-    @GetMapping("/outlet/{id}")
-    public List<GroceryItem> getByOutlet(@PathVariable String id) {
-        return service.getByOutlet(id);
-    }
-
-    @PostMapping("/load-csv")
-    public String loadData() {
-        List<GroceryItem> items = csvService.loadCSV();
-        items.forEach(service::save);
-        return "CSV data loaded successfully!";
-    }
-
-    @DeleteMapping("/{id}")
-    public String delete(@PathVariable Long id) {
-        service.delete(id);
-        return "Deleted ID: " + id;
+        if (name != null && !name.isEmpty()) {
+            return repository.findByNameContainingIgnoreCase(name);
+        } else if (category != null && !category.isEmpty()) {
+            return repository.findByCategoryIgnoreCase(category);
+        } else {
+            return repository.findAll();
+        }
     }
 }
