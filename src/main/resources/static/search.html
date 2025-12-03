@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Blinkit Search</title>
+</head>
+<body>
+<h2>Search Items</h2>
+<input type="text" id="searchInput" placeholder="Search items...">
+<button onclick="search()">Search</button>
+<div id="result"></div>
+
+<script>
+function search() {
+    const q = document.getElementById("searchInput").value;
+    fetch(`/api/items/search?q=${q}`)
+        .then(res => res.json())
+        .then(data => {
+            let html = "";
+            data.forEach(item => {
+                html += `<p><strong>${item.itemIdentifier}</strong> — ${item.itemType} — ${item.itemFatContent} — ${item.outletLocationType} — ${item.outletEstablishmentYear} — ${item.sales}</p><hr>`;
+            });
+            document.getElementById("result").innerHTML = html;
+        });
+}
+</script>
+</body>
+</html>

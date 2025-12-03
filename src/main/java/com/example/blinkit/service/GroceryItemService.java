@@ -1,7 +1,7 @@
 package com.example.blinkit.service;
 
 import com.example.blinkit.entity.GroceryItem;
-import com.example.blinkit.repository.GroceryItemRepository;
+import com.example.blinkit.repository.GroceryRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -9,9 +9,9 @@ import java.util.List;
 @Service
 public class GroceryItemService {
 
-    private final GroceryItemRepository repository;
+    private final GroceryRepository repository;
 
-    public GroceryItemService(GroceryItemRepository repository) {
+    public GroceryItemService(GroceryRepository repository) {
         this.repository = repository;
     }
 
@@ -19,9 +19,7 @@ public class GroceryItemService {
         if (keyword == null || keyword.isEmpty()) {
             return repository.findAll();
         }
-        return repository.findByNameContainingIgnoreCaseOrDescriptionContainingIgnoreCaseOrCategoryContainingIgnoreCase(
-                keyword, keyword, keyword
-        );
+        return repository.searchByKeyword(keyword);
     }
 
     public List<GroceryItem> getAllItems() {
