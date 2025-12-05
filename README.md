@@ -1,16 +1,28 @@
 # blinkit-springboot
-A Spring Boot RESTful API for managing grocery items with CRUD operations, CSV import, and search functionality. Built using a layered architecture (Controller, Service, Repository) with Spring Data JPA and H2 database. Ideal as a starter template for backend services.
+This project is a Grocery Management and Search System built using Spring Boot, PostgreSQL, and Spring Data JPA. It allows users to search for grocery items, view details, and manage data via REST APIs and a simple web interface.
 
-Features
+#Features
 
-CRUD Operations: Create, Read, Update, Delete grocery items.
+Load grocery items from a CSV file into PostgreSQL automatically.
 
-CSV Import: Bulk import grocery data from a CSV file.
+Search grocery items by name, category, or description.
 
-Search API: Search grocery items by name, category, or description.
+REST API endpoints for CRUD operations on grocery items.
 
-Validation: Input validation for creating/updating items.
+Web UI for quick search and display.
 
-In-Memory Database: Uses H2 for easy setup and testing.
+Uses Spring Boot with embedded Tomcat server (runs on port 8080 by default).
 
-Gradle Build: Simplified dependency management with Gradle.
+#Tech Stack
+
+Backend: Java 21, Spring Boot 3, Spring Data JPA
+
+Database: PostgreSQL
+
+Build Tool: Gradle
+
+Frontend: HTML (basic search interface)
+
+ORM: Hibernate
+
+API Testing: Swagger (if included)
